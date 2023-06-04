@@ -36,9 +36,6 @@ export const contactsList = createSlice({
     },
     filterContacts: (state, action) => {
       state.filter = action.payload;
-      state.contacts.filter(el =>
-        el.name.toLowerCase().includes(action.payload.toLowerCase())
-      );
     },
   },
 });
