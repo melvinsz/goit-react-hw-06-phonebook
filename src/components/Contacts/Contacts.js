@@ -1,37 +1,41 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact, filterContacts } from 'components/redux/contactsList';
 import Input from 'components/Input/Input';
 import Notification from 'components/Notification/Notification';
 
-const Contacts = ({ contacts, onClickDelete }) => {
-  const [filtered, setFiltered] = useState('');
+const Contacts = () => {
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filter);
+  const dispatch = useDispatch();
 
-  const handleInputChange = e => {
-    setFiltered(e.target.value);
+  const handleDelete = id => {
+    dispatch(deleteContact(id));
   };
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.includes(filtered)
-  );
+  const handleChange = e => {
+    const value = e.target.value;
+    dispatch(filterContacts(value));
+  };
 
   return (
     <div>
       <Input
         label="Find contacts by name"
-        value={filtered}
-        onChange={handleInputChange}
+        value={filter}
+        onChange={handleChange}
         type="text"
         name="filter"
       />
 
-      {!filteredContacts.length ? (
+      {!contacts.length ? (
         <Notification message="Contact list is empty." />
       ) : (
         <ul>
-          {filteredContacts.map(({ id, name, number }) => (
+          {contacts.map(({ id, name, number }) => (
             <li key={id}>
               <span>{name}</span>
               <span>{number}</span>
-              <button type="button" onClick={() => onClickDelete(id)}>
+              <button type="button" onClick={() => handleDelete(id)}>
                 Delete
               </button>
             </li>
@@ -41,51 +45,5 @@ const Contacts = ({ contacts, onClickDelete }) => {
     </div>
   );
 };
-
-// class Contacts extends Component {
-//   state = {
-//     filtered: '',
-//   };
-
-//   handleInputChange = e => {
-//     this.setState({ filtered: e.target.value });
-//   };
-
-//   render() {
-//     const { filtered } = this.state;
-//     const { contacts, onClickDelete } = this.props;
-//     const filteredContacts = contacts.filter(contact =>
-//       contact.name.includes(filtered)
-//     );
-
-//     return (
-//       <div>
-//         <Input
-//           label="Find contacts by name"
-//           value={filtered}
-//           onChange={this.handleInputChange}
-//           type="text"
-//           name="filter"
-//         />
-
-//         {!filteredContacts.length ? (
-//           <Notification message="Contact list is empty." />
-//         ) : (
-//           <ul>
-//             {filteredContacts.map(({ id, name, number }) => (
-//               <li key={id}>
-//                 <span>{name}</span>
-//                 <span>{number}</span>
-//                 <button type="button" onClick={() => onClickDelete(id)}>
-//                   Delete
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-//     );
-//   }
-// }
 
 export default Contacts;

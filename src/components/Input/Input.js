@@ -1,16 +1,15 @@
-// import PropTypes from 'prop-types';
-
 const Input = ({ children, ...other }) => {
   const {
     label,
-    value,
     onChange,
+    value,
     type,
     name,
     pattern,
     title,
     required = false,
   } = other;
+
   return (
     <p>
       <label>
