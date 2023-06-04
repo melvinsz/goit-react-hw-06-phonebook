@@ -17,6 +17,10 @@ const Contacts = () => {
     dispatch(filterContacts(value));
   };
 
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.includes(filter)
+  );
+
   return (
     <div>
       <Input
@@ -27,11 +31,11 @@ const Contacts = () => {
         name="filter"
       />
 
-      {!contacts.length ? (
+      {!filteredContacts.length ? (
         <Notification message="Contact list is empty." />
       ) : (
         <ul>
-          {contacts.map(({ id, name, number }) => (
+          {filteredContacts.map(({ id, name, number }) => (
             <li key={id}>
               <span>{name}</span>
               <span>{number}</span>
