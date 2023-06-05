@@ -1,13 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
+import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const initialState = {
   contacts: [],
   filter: '',
 };
 
-export const contactsList = createSlice({
+const contactsList = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
@@ -40,5 +42,20 @@ export const contactsList = createSlice({
   },
 });
 
+const persistConfig = {
+  key: 'contacts',
+  storage,
+};
+
+export const contactReducer = persistReducer(
+  persistConfig,
+  contactsList.reducer
+);
+
 export const { addContact, deleteContact, filterContacts } =
   contactsList.actions;
+
+// Selectors
+
+export const getContactsValue = state => state.contacts.contacts;
+export const getFilterValue = state => state.contacts.filter;
